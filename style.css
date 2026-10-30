@@ -1,0 +1,169 @@
+/* ==========================================================================
+   Tock&Co. — comic-cinema design system
+   Recurring devices (kept deliberately few): ink outline + hard offset shadow,
+   halftone dots, radial speed lines, one impact word. Strongest accent colour
+   (--accent) is reserved for: panel shadow, rim light, active pager mark, glow.
+   ========================================================================== */
+@font-face{font-family:Bangers;src:url(assets/fonts/bangers.woff) format('woff');font-weight:400;font-display:swap}
+@font-face{font-family:Archivo;src:url(assets/fonts/archivo-var.woff) format('woff');font-weight:400 700;font-display:swap}
+
+:root{
+  --accent:#ff7a1a;
+  --ink:#0b0a14; --navy:#181338; --cy:#19d3ee; --mg:#ff2e88; --ye:#ffd400; --paper:#fff6e0; --bg:#080b14;
+  --u:.5rem;                     /* spacing unit: 0.5rem steps */
+  --line:3px;                    /* outline weight */
+  --off:8px;                     /* hard shadow offset */
+  --ease:cubic-bezier(.2,.8,.2,1);
+  --gx:6vw;                      /* page gutter */
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;overflow-x:clip}
+body{font:400 1.05rem/1.55 Archivo,system-ui,sans-serif;color:var(--paper);background:var(--bg);overflow-x:hidden}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip-link{position:fixed;left:1rem;top:-4rem;z-index:20;background:var(--ye);color:var(--ink);font:400 1.2rem Bangers;padding:.4rem 1rem;border:var(--line) solid var(--ink);text-decoration:none}
+.skip-link:focus{top:1rem}
+
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:1;display:block;touch-action:pan-y}
+h1,h2,.logo,.burst{font-family:Bangers,Impact,sans-serif;font-weight:400;letter-spacing:.02em;text-transform:none}
+h1{font-size:clamp(3.2rem,9vw,8rem);line-height:.92;transform:skewY(-3deg)}
+h1 span{display:block;color:var(--paper);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:6px 6px 0 var(--mg)}
+h1 span+span{color:var(--ye);text-shadow:6px 6px 0 var(--cy)}
+h2{font-size:clamp(2.4rem,5vw,4rem);line-height:1;color:var(--ye);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--accent)}
+.lead{max-width:34ch;margin:1rem 0 1.5rem;font-size:1.15rem}
+.kicker{display:flex;align-items:center;gap:.7rem;margin:0 0 1.2rem;font:600 .8rem/1 Archivo,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--cy)}
+.kicker::before{content:"";width:2.6rem;height:.35rem;background:var(--ye);border:2px solid var(--ink);transform:skewX(-25deg)}
+
+main{position:relative;z-index:4;pointer-events:none;overflow-x:clip}
+section{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:6rem var(--gx) 3rem}
+.copy{max-width:min(560px,100%)}
+
+/* ---- comic caption panel ---- */
+.panel{position:relative;background:rgba(8,11,20,.9);border:var(--line) solid var(--ink);box-shadow:var(--off) var(--off) 0 var(--accent);padding:1.7rem 1.7rem 1.5rem;transform:rotate(-.7deg)}
+.chap.right .panel{transform:rotate(.7deg)}
+.panel::after{content:"";position:absolute;right:0;bottom:0;width:60%;height:60%;pointer-events:none;opacity:.3;
+  background:radial-gradient(circle,var(--accent) 0 1.4px,transparent 1.9px) 0 0/8px 8px;
+  -webkit-mask-image:linear-gradient(135deg,transparent 35%,#000);mask-image:linear-gradient(135deg,transparent 35%,#000)}
+.panel>*{position:relative;z-index:1}
+.issue{position:absolute!important;top:-1.15rem;left:1rem;margin:0;background:var(--accent);color:var(--ink);font:400 1.15rem/1 Bangers;letter-spacing:.06em;padding:.3rem .7rem .2rem;border:var(--line) solid var(--ink);transform:rotate(-2deg)}
+.issue span{opacity:.6}
+.buy{display:flex;align-items:center;gap:1.1rem;flex-wrap:wrap}
+.price-wrap{display:inline-block;filter:drop-shadow(3px 3px 0 var(--ink)) drop-shadow(-1px -1px 0 var(--ink)) drop-shadow(1px -1px 0 var(--ink));transform:rotate(-8deg)}
+.price{display:grid;place-items:center;width:6.4rem;aspect-ratio:1;background:var(--ye);color:var(--ink);font:400 1.45rem/1 Bangers;letter-spacing:.02em;
+  clip-path:polygon(50.0% 0.0%,58.5% 13.0%,71.7% 5.0%,73.7% 20.3%,89.1% 18.8%,84.2% 33.5%,98.7% 38.9%,88.0% 50.0%,98.7% 61.1%,84.2% 66.5%,89.1% 81.2%,73.7% 79.7%,71.7% 95.0%,58.5% 87.0%,50.0% 100.0%,41.5% 87.0%,28.3% 95.0%,26.3% 79.7%,10.9% 81.2%,15.8% 66.5%,1.3% 61.1%,12.0% 50.0%,1.3% 38.9%,15.8% 33.5%,10.9% 18.8%,26.3% 20.3%,28.3% 5.0%,41.5% 13.0%)}
+
+/* ---- buttons: ink outline + hard offset shadow, pressed = shadow collapses ---- */
+.btn{pointer-events:auto;font:400 1.35rem Bangers;letter-spacing:.04em;cursor:pointer;color:var(--ink);background:var(--ye);
+  border:var(--line) solid var(--ink);padding:.55rem 1.4rem;text-decoration:none;display:inline-block;box-shadow:5px 5px 0 var(--mg);
+  transition:transform .12s var(--ease),box-shadow .12s var(--ease),background-color .12s;touch-action:manipulation}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--mg)}
+.btn:active,.btn.pressed{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--mg)}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid var(--cy);outline-offset:3px}
+.btn.small{padding:.2rem .9rem;font-size:1.1rem}
+.btn.ghost{background:var(--paper);margin-left:.5rem}
+.btn.ghost-n{background:transparent;color:var(--paper);border-color:var(--paper);box-shadow:3px 3px 0 var(--ink)}
+.btn.ghost-n[aria-pressed=true]{background:var(--cy);color:var(--ink);border-color:var(--ink);box-shadow:3px 3px 0 var(--mg)}
+.btn b{background:var(--ink);color:var(--ye);padding:0 .45rem;margin-left:.3rem;display:inline-block}
+.btn[aria-disabled=true]{opacity:.5;pointer-events:none}
+.chap .copy .btn{margin:0}
+.note{font-size:.85rem;opacity:.85;margin-top:.8rem}
+
+/* ---- nav + pager ---- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem var(--gx) 2.2rem;
+  background:linear-gradient(rgba(8,11,20,.72),rgba(8,11,20,0))}
+.nav nav{display:flex;gap:1.1rem;align-items:center}.nav a{color:var(--paper);text-decoration:none;font-weight:600}
+.logo{font-size:2rem;color:var(--ye)!important;-webkit-text-stroke:1.5px var(--ink);paint-order:stroke fill;text-shadow:3px 3px 0 var(--mg)}
+.nav a:not(.logo){background:linear-gradient(var(--cy),var(--cy)) 0 100%/0 3px no-repeat;transition:background-size .22s var(--ease);padding-bottom:2px}
+.nav a:not(.logo):hover{background-size:100% 3px}
+.pager{position:fixed;right:max(.6rem,1.6vw);top:50%;transform:translateY(-50%);z-index:6;display:flex;flex-direction:column}
+.pager a{pointer-events:auto;display:grid;place-items:center;width:2.75rem;height:2.4rem;text-decoration:none}
+.pager i{display:block;width:.8rem;height:.8rem;border:2.5px solid var(--paper);transform:rotate(45deg);transition:transform .2s var(--ease),background-color .2s,border-color .2s;background:transparent}
+.pager a:hover i{transform:rotate(45deg) scale(1.3)}
+.pager a[aria-current=true] i{background:var(--accent);border-color:var(--ink);box-shadow:0 0 0 2px var(--paper);transform:rotate(45deg) scale(1.3)}
+
+/* ---- hero ---- */
+.skip{pointer-events:auto;position:fixed;bottom:1.5rem;right:var(--gx);background:rgba(8,11,20,.6);border:2px solid var(--paper);color:var(--paper);padding:.4rem 1rem;cursor:pointer;font:inherit;z-index:7}
+.burst{position:fixed;z-index:5;left:68%;top:46%;font-size:clamp(5rem,16vw,13rem);color:var(--ye);-webkit-text-stroke:5px var(--ink);paint-order:stroke fill;text-shadow:10px 10px 0 var(--mg);
+  transform:translate(-50%,-50%) scale(0) rotate(-12deg);opacity:0;pointer-events:none;white-space:nowrap}
+.hero .copy{position:relative}
+
+/* ---- chapters ---- */
+section.right{justify-content:flex-end}section.chap{min-height:120vh}section.low{align-items:flex-end}
+.lineup-links{list-style:none;padding:0;margin:0 0 1.3rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.lineup-links a{pointer-events:auto;display:inline-block;color:var(--ink);background:var(--paper);border:2px solid var(--ink);padding:.15rem .7rem;text-decoration:none;font-weight:600;font-size:.9rem;box-shadow:3px 3px 0 var(--cyan,var(--cy));transition:transform .12s var(--ease),box-shadow .12s var(--ease)}
+.lineup-links a:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--cy)}
+.poster{display:none}
+body.nogl .poster,.chap.nomodel .poster,.hero.nomodel .poster{display:block;position:absolute;right:max(var(--gx),4vw);top:50%;transform:translateY(-50%);height:min(70vh,640px);width:auto;max-width:44vw;object-fit:contain;filter:drop-shadow(8px 8px 0 var(--ink))}
+body.nogl .chap:not(.right) .poster,.chap.nomodel:not(.right) .poster{right:max(var(--gx),4vw)}
+body.nogl .chap.right .poster,.chap.right.nomodel .poster{right:auto;left:max(var(--gx),4vw)}
+
+/* ---- tooltip over lineup ---- */
+.tip{position:fixed;z-index:8;left:0;top:0;pointer-events:none;background:var(--ye);color:var(--ink);border:var(--line) solid var(--ink);box-shadow:4px 4px 0 var(--accent);padding:.15rem .7rem;font:400 1.15rem/1.2 Bangers;letter-spacing:.04em;white-space:nowrap;transform:translate(-50%,-140%) rotate(-2deg)}
+.tip[hidden]{display:none}
+body.over-watch,body.over-watch *{cursor:grab}
+body.dragging,body.dragging *{cursor:grabbing!important}
+body.over-pick,body.over-pick *{cursor:pointer}
+
+/* ---- loader ---- */
+.load{position:fixed;z-index:9;left:50%;bottom:1.2rem;transform:translateX(-50%);display:grid;gap:.35rem;justify-items:center;font:400 1.4rem Bangers;color:var(--ye);background:var(--ink);padding:.3rem 1rem .5rem;border:2px solid var(--ye);transition:opacity .3s}
+.load.off{opacity:0;pointer-events:none}
+.load .bar{display:block;width:9rem;height:.4rem;background:#fff2;overflow:hidden}
+.load .bar b{display:block;height:100%;width:0;background:var(--mg);transition:width .2s}
+.load.indet .bar b{width:40%;animation:slide 1.1s ease-in-out infinite alternate}
+@keyframes slide{from{transform:translateX(-10%)}to{transform:translateX(150%)}}
+
+/* ---- cart drawer ---- */
+.scrim{position:fixed;inset:0;z-index:9;background:rgba(5,6,12,.62);opacity:0;transition:opacity .26s}
+.scrim.open{opacity:1}
+.drawer{position:fixed;z-index:10;right:0;top:0;bottom:0;width:min(420px,100%);background:var(--ink);border-left:4px solid var(--mg);padding:1.5rem;overflow:auto;
+  transform:translateX(104%);transition:transform .28s var(--ease);box-shadow:-12px 0 0 rgba(255,46,136,.18)}
+.drawer.open{transform:none}
+.drawer[hidden],.scrim[hidden]{display:none}
+.drawer ul{list-style:none;padding:0;margin:1rem 0}.drawer li{display:flex;justify-content:space-between;gap:.5rem;padding:.5rem 0;border-bottom:1px dashed #fff4}
+.drawer li.empty{display:block;opacity:.75;border-bottom:0}
+.drawer li button{background:none;border:0;color:var(--mg);cursor:pointer;font:inherit;text-decoration:underline;padding:.2rem .4rem}
+.total{margin:1rem 0;font-size:1.2rem}
+
+/* ---- intro states ---- */
+body.intro .nav,body.intro .hero .copy>*,body.intro .pager{opacity:0}
+body.intro main section:not(.hero){visibility:hidden}
+body.nogl #gl{display:none}
+
+/* ---- background: glow, halftone, speed lines, dial (all CSS, composited) ---- */
+.bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:linear-gradient(160deg,#06080f,#0e1424 55%,#080b14);transform:translateZ(0)}
+.glow{position:absolute;width:90vmax;height:90vmax;left:55%;top:50%;margin:-45vmax 0 0 -25vmax;border-radius:50%;opacity:0;will-change:opacity,transform;animation:drift 22s ease-in-out infinite alternate}
+.g0{background:radial-gradient(circle,#ff7a1a55,transparent 62%);opacity:.5}.g1{background:radial-gradient(circle,#1fd18a50,transparent 62%)}
+.g2{background:radial-gradient(circle,#4d8dff55,transparent 62%)}.g3{background:radial-gradient(circle,#d4b04c50,transparent 62%)}
+.dots{position:absolute;inset:0;pointer-events:none}
+.dots-a{background:radial-gradient(circle,rgba(255,46,136,.5) 0 1.5px,transparent 2px) 0 0/10px 10px;-webkit-mask-image:radial-gradient(ellipse 60% 55% at 0% 100%,#000,transparent);mask-image:radial-gradient(ellipse 60% 55% at 0% 100%,#000,transparent);opacity:.32}
+.dots-b{background:radial-gradient(circle,rgba(25,211,238,.5) 0 1.5px,transparent 2px) 0 0/10px 10px;-webkit-mask-image:radial-gradient(ellipse 55% 50% at 100% 0%,#000,transparent);mask-image:radial-gradient(ellipse 55% 50% at 100% 0%,#000,transparent);opacity:.26}
+.fxw{position:absolute;inset:0;will-change:transform}
+.rays{position:absolute;width:170vmax;height:170vmax;left:50%;top:50%;margin:-85vmax 0 0 -85vmax;opacity:.9;pointer-events:none;
+  background:repeating-conic-gradient(from 7deg,rgba(255,255,255,.07) 0 2.2deg,transparent 2.2deg 8deg);
+  -webkit-mask-image:radial-gradient(circle,transparent 7%,#000 20%,transparent 60%);mask-image:radial-gradient(circle,transparent 7%,#000 20%,transparent 60%)}
+.dial{position:absolute;width:min(130vmin,1000px);left:50%;top:50%;margin:calc(min(130vmin,1000px)/-2) 0 0 calc(min(130vmin,1000px)/-2);color:#fff;opacity:.13;animation:spin 240s steps(240) infinite;will-change:transform}
+.vignette{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(2,3,8,.55))}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes drift{to{transform:translate3d(-6vmax,4vmax,0) scale(1.08)}}
+body.fx-low .dial,body.fx-low .glow{animation-play-state:paused}
+
+@media(max-width:800px){
+  .lineup-links{flex-wrap:nowrap;overflow-x:auto;padding-bottom:.5rem;margin-bottom:.9rem;-webkit-overflow-scrolling:touch;scrollbar-width:thin}.lineup-links a{white-space:nowrap;font-size:.82rem}
+  :root{--off:6px}
+  .hero{align-items:flex-end}.panelSec{align-items:flex-end}
+  .nav nav a{display:none}.nav{padding-bottom:1.6rem}
+  .copy{width:100%;max-width:none}.panel{padding:1.2rem 1.1rem 1.1rem;min-width:0}.panel h2{overflow-wrap:anywhere}.lead{font-size:1rem;margin:.6rem 0 1rem}
+  .price{width:5.4rem;font-size:1.25rem}
+  .burst{left:50%;top:30%}
+  .glow{left:30%}
+  .pager{display:none}
+  section.chap{min-height:100vh;min-height:100svh;padding-bottom:1.4rem}.hero,section.low{padding-bottom:1.4rem}
+  .nav{gap:.5rem;padding-inline:4vw}.nav nav{gap:.45rem}.logo{font-size:1.6rem}.btn.small{padding:.15rem .6rem;font-size:1rem}
+  h2{font-size:clamp(2.1rem,9vw,2.8rem)}
+  body.nogl .poster,.chap.nomodel .poster{position:static;transform:none;max-width:70%;height:34vh;margin:0 auto 1rem;display:block}
+  body.nogl section.chap,.chap.nomodel{flex-direction:column;justify-content:flex-end}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}*{transition:none!important}.dial,.glow{animation:none}
+}
+
+/* dev-only: ?shot=N renders one watch on a transparent canvas (used to generate the fallback posters) */
+body.shot{background:transparent}body.shot .bg,body.shot main,body.shot .nav,body.shot .pager,body.shot .burst,body.shot .load,body.shot .skip,body.shot .skip-link{display:none!important}
